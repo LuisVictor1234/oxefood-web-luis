@@ -1,7 +1,8 @@
-import InputMask from 'comigo-tech-react-input-mask';
-import React, { useState } from "react";
-import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import axios from "axios";
+import InputMask from 'comigo-tech-react-input-mask';
+import { useState } from "react";
+import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
+import MenuSistema from '../../MenuSistema';
 
 export default function FormCliente () {
 
@@ -33,7 +34,7 @@ const [nome, setNome] = useState();
     return (
 
         <div>
-
+            <MenuSistema tela={'cliente'} />
             <div style={{marginTop: '3%'}}>
 
                 <Container textAlign='justified' >
