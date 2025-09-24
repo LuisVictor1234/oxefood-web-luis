@@ -2,8 +2,11 @@ import axios from "axios";
 import InputMask from 'comigo-tech-react-input-mask';
 import { useState } from "react";
 import { Button, Container, Divider, Form, Icon, Select } from 'semantic-ui-react';
+import { useNavigate } from "react-router-dom";
 
 export default function FormEntregador() {
+
+    const navigate = useNavigate();
 
     const opcoesUF = [
         { key: 'PE', value: 'PE', text: 'PE' },
@@ -52,6 +55,7 @@ export default function FormEntregador() {
         axios.post("http://localhost:8080/api/entregador", entregadorRequest)
             .then((response) => {
                 console.log("Entregador cadastrado com sucesso!");
+                navigate("/list-entregador");
             })
             .catch((error) => {
                 console.error("Erro ao cadastrar entregador:", error);
@@ -228,6 +232,7 @@ export default function FormEntregador() {
                                 icon
                                 labelPosition='left'
                                 color='orange'
+                                onClick={() => navigate("/list-entregador")}
                             >
                                 <Icon name='reply' />
                                 Voltar

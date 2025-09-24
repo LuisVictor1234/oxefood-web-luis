@@ -1,8 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
+import { useNavigate } from "react-router-dom";
 
 export default function FormProduto() {
+
+    const navigate = useNavigate();
 
     const [titulo, setTitulo] = useState("");
     const [codigo, setCodigo] = useState("");
@@ -117,6 +120,7 @@ export default function FormProduto() {
                                 icon
                                 labelPosition='left'
                                 color='orange'
+                                onClick={() => navigate("/list-produto")}
                             >
                                 <Icon name='reply' />
                                 Listar
