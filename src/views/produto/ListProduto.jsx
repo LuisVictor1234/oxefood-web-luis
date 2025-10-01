@@ -1,12 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table } from 'semantic-ui-react';
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Container, Divider, Icon, Table, Modal, Header } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 
 export default function ListProduto() {
 
     const [lista, setLista] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [idRemover, setIdRemover] = useState();
+    const navigate = useNavigate();
 
     useEffect(() => {
         carregarLista();
@@ -20,6 +23,23 @@ export default function ListProduto() {
             .catch((error) => {
                 console.error("Erro ao buscar produtos:", error);
             });
+    }
+
+    function confirmaRemover(id) {
+        setOpenModal(true);
+        setIdRemover(id);
+    }
+
+    async function remover() {
+        await axios.delete("http://localhost:8080/api/produto/" + idRemover)
+            .then(() => {
+                console.log("Produto removido com sucesso!");
+                carregarLista();
+            })
+            .catch((error) => {
+                console.error("Erro ao remover produto:", error);
+            });
+        setOpenModal(false);
     }
 
     return (
@@ -67,10 +87,24 @@ export default function ListProduto() {
                                         <Table.Cell>{produto.tempoEntregaMinimo}</Table.Cell>
                                         <Table.Cell>{produto.tempoEntregaMaximo}</Table.Cell>
                                         <Table.Cell textAlign='center'>
-                                            <Button inverted circular color='green' icon title='Editar'>
+                                            <Button
+                                                inverted
+                                                circular
+                                                color='green'
+                                                icon
+                                                title='Editar'
+                                                onClick={() => navigate("/form-produto", { state: { id: produto.id } })}
+                                            >
                                                 <Icon name='edit' />
                                             </Button> &nbsp;
-                                            <Button inverted circular color='red' icon title='Remover'>
+                                            <Button
+                                                inverted
+                                                circular
+                                                color='red'
+                                                icon
+                                                title='Remover'
+                                                onClick={() => confirmaRemover(produto.id)}
+                                            >
                                                 <Icon name='trash' />
                                             </Button>
                                         </Table.Cell>
@@ -81,6 +115,30 @@ export default function ListProduto() {
                     </div>
                 </Container>
             </div>
+
+            {/* Modal de confirmação */}
+            <Modal
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+            >
+                <Header icon>
+                    <Icon name='trash' />
+                    <div style={{ marginTop: '5%' }}>
+                        Tem certeza que deseja remover esse registro?
+                    </div>
+                </Header>
+
+                <Modal.Actions>
+                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
+                        <Icon name='remove' /> Não
+                    </Button>
+                    <Button color='green' inverted onClick={remover}>
+                        <Icon name='checkmark' /> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
         </div>
     );
 }

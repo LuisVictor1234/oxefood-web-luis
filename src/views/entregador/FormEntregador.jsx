@@ -1,12 +1,14 @@
 import axios from "axios";
 import InputMask from 'comigo-tech-react-input-mask';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Divider, Form, Icon, Select } from 'semantic-ui-react';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import MenuSistema from '../../MenuSistema';
 
 export default function FormEntregador() {
 
     const navigate = useNavigate();
+    const { state } = useLocation();
 
     const opcoesUF = [
         { key: 'PE', value: 'PE', text: 'PE' },
@@ -15,6 +17,7 @@ export default function FormEntregador() {
         { key: 'MG', value: 'MG', text: 'MG' },
     ];
 
+    const [idEntregador, setIdEntregador] = useState();
     const [nome, setNome] = useState("");
     const [cpf, setCpf] = useState("");
     const [rg, setRg] = useState("");
@@ -31,6 +34,35 @@ export default function FormEntregador() {
     const [enderecoUf, setEnderecoUf] = useState("");
     const [enderecoComplemento, setEnderecoComplemento] = useState("");
     const [ativo, setAtivo] = useState(true);
+
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get("http://localhost:8080/api/entregador/" + state.id)
+                .then((response) => {
+                    const dados = response.data;
+                    setIdEntregador(dados.id);
+                    setNome(dados.nome);
+                    setCpf(dados.cpf);
+                    setRg(dados.rg);
+                    setDataNascimento(dados.dataNascimento);
+                    setFoneCelular(dados.foneCelular);
+                    setFoneFixo(dados.foneFixo);
+                    setQtdEntregasRealizadas(dados.qtdEntregasRealizadas);
+                    setValorFrete(dados.valorFrete);
+                    setEnderecoRua(dados.enderecoRua);
+                    setEnderecoNumero(dados.enderecoNumero);
+                    setEnderecoBairro(dados.enderecoBairro);
+                    setEnderecoCidade(dados.enderecoCidade);
+                    setEnderecoCep(dados.enderecoCep);
+                    setEnderecoUf(dados.enderecoUf);
+                    setEnderecoComplemento(dados.enderecoComplemento);
+                    setAtivo(dados.ativo);
+                })
+                .catch((error) => {
+                    console.error("Erro ao carregar entregador:", error);
+                });
+        }
+    }, [state]);
 
     function salvar() {
         const entregadorRequest = {
@@ -52,27 +84,48 @@ export default function FormEntregador() {
             ativo
         };
 
-        axios.post("http://localhost:8080/api/entregador", entregadorRequest)
-            .then((response) => {
-                console.log("Entregador cadastrado com sucesso!");
-                navigate("/list-entregador");
-            })
-            .catch((error) => {
-                console.error("Erro ao cadastrar entregador:", error);
-            });
+        if (idEntregador != null) {
+            axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
+                .then(() => {
+                    console.log("Entregador alterado com sucesso!");
+                    navigate("/list-entregador");
+                })
+                .catch((error) => {
+                    console.error("Erro ao alterar entregador:", error);
+                });
+        } else {
+            axios.post("http://localhost:8080/api/entregador", entregadorRequest)
+                .then(() => {
+                    console.log("Entregador cadastrado com sucesso!");
+                    navigate("/list-entregador");
+                })
+                .catch((error) => {
+                    console.error("Erro ao cadastrar entregador:", error);
+                });
+        }
     }
 
     return (
         <div>
+            <MenuSistema tela={'cliente'} />
             <div style={{ marginTop: '3%' }}>
                 <Container textAlign='justified'>
 
-                    <h2>
-                        <span style={{ color: 'darkgray' }}> Entregador &nbsp;
-                            <Icon name='angle double right' size="small" />
-                        </span>
-                        Cadastro
-                    </h2>
+                    {idEntregador === undefined ? (
+                        <h2>
+                            <span style={{ color: 'darkgray' }}> Entregador &nbsp;
+                                <Icon name='angle double right' size="small" />
+                            </span>
+                            Cadastro
+                        </h2>
+                    ) : (
+                        <h2>
+                            <span style={{ color: 'darkgray' }}> Entregador &nbsp;
+                                <Icon name='angle double right' size="small" />
+                            </span>
+                            Alteração
+                        </h2>
+                    )}
 
                     <Divider />
 

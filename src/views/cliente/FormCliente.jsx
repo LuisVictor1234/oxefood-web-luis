@@ -72,10 +72,6 @@ const [nome, setNome] = useState();
                     { idCliente !== undefined &&
                     <h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                     }
-
-
-                    <h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
-
                     <Divider />
 
                     <div style={{marginTop: '4%'}}>
