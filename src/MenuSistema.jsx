@@ -6,7 +6,12 @@ export default function MenuSistema (props) {
    return(
        <>
            <Menu inverted>
-              
+              <Menu.Item
+                as={Link}
+                to='/list-cidade'
+                name='Cidade'
+                active={props.tela === 'cidade'}
+                />
                <Menu.Item
                    content='Home'
                    active={props.tela === 'home'}

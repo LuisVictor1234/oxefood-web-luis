@@ -47,15 +47,6 @@ const [nome, setNome] = useState();
            .then((response) => { console.log('Cliente cadastrado com sucesso.') })
            .catch((error) => { console.log('Erro ao incluir o cliente.') })
        }
-
-	
-		axios.post("http://localhost:8080/api/cliente", clienteRequest)
-		.then((response) => {
-		     console.log('Cliente cadastrado com sucesso.')
-		})
-		.catch((error) => {
-		     console.log('Erro ao incluir o um cliente.')
-		})
 	}
 
     return (
@@ -112,7 +103,7 @@ const [nome, setNome] = useState();
                                     width={6}>
                                     <InputMask 
                                         mask="(99) 9999.9999"
-                                        value={nome}
+                                        value={foneCelular}
 			                            onChange={e => setFoneCelular(e.target.value)}
                                     /> 
                                 </Form.Input>
@@ -123,7 +114,7 @@ const [nome, setNome] = useState();
                                     width={6}>
                                     <InputMask 
                                         mask="(99) 9999.9999"
-                                        value={nome}
+                                        value={foneFixo}
 			                            onChange={e => setFoneFixo(e.target.value)}
                                     /> 
                                 </Form.Input>
@@ -137,7 +128,7 @@ const [nome, setNome] = useState();
                                         mask="99/99/9999" 
                                         maskChar={null}
                                         placeholder="Ex: 20/03/1985"
-                                        value={nome}
+                                        value={dataNascimento}
 			                            onChange={e => setDataNascimento(e.target.value)}
                                     /> 
                                 </Form.Input>
