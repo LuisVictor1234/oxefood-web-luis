@@ -83,7 +83,7 @@ export default function ListProduto() {
                                 {lista.map(produto => (
                                     <Table.Row key={produto.id}>
                                         <Table.Cell>{produto.codigo}</Table.Cell>
-                                        <Table.Cell>{p.categoria.descricao}</Table.Cell>
+                                        <Table.Cell>{produto.categoria.descricao}</Table.Cell>
                                         <Table.Cell>{produto.titulo}</Table.Cell>
                                         <Table.Cell>{produto.valorUnitario}</Table.Cell>
                                         <Table.Cell>{produto.tempoEntregaMinimo}</Table.Cell>
